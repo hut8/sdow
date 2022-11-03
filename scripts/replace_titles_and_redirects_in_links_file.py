@@ -50,7 +50,13 @@ for line in io.BufferedReader(gzip.open(REDIRECTS_FILE, 'r')):
 # Loop through each line in the links file, replacing titles with IDs, applying redirects, and
 # removing nonexistent pages, writing the result to stdout.
 for line in io.BufferedReader(gzip.open(LINKS_FILE, 'r')):
-  [source_page_id, target_page_title] = line.decode('UTF-8').rstrip('\n').split('\t')
+  source_page_id = ''
+  target_page_title = ''
+  try:
+    [source_page_id, target_page_title] = line.decode('UTF-8').rstrip('\n').split('\t')
+  except:
+    print(line, file=sys.stderr)
+    raise
 
   source_page_exists = source_page_id in ALL_PAGE_IDS
 
