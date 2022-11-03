@@ -19,10 +19,10 @@ else
   fi
 fi
 
-ROOT_DIR=`pwd`
-OUT_DIR="dump"
+ROOT_DIR=`pwd`/scripts
+OUT_DIR="/data/sdow/dump"
 
-DOWNLOAD_URL="https://dumps.wikimedia.your.org/enwiki/$DOWNLOAD_DATE"
+DOWNLOAD_URL="https://dumps.wikimedia.org/enwiki/$DOWNLOAD_DATE"
 TORRENT_URL="https://tools.wmflabs.org/dump-torrents/enwiki/$DOWNLOAD_DATE"
 
 SHA1SUM_FILENAME="enwiki-$DOWNLOAD_DATE-sha1sums.txt"
@@ -117,7 +117,7 @@ if [ ! -f pages.txt.gz ]; then
   # Zip into output file
   time pigz -dc $PAGES_FILENAME \
     | sed -n 's/^INSERT INTO `page` VALUES (//p' \
-    | sed -e 's/),(/\'$'\n/g' \
+    | sed -Ee 's/\),\(([0-9]{2,})/\n\1/g' \
     | egrep "^[0-9]+,0," \
     | sed -e $"s/,0,'/\t/" \
     | sed -e $"s/',[^,]*,\([01]\).*/\t\1/" \
@@ -140,7 +140,7 @@ if [ ! -f links.txt.gz ]; then
   # Zip into output file
   time pigz -dc $LINKS_FILENAME \
     | sed -n 's/^INSERT INTO `pagelinks` VALUES (//p' \
-    | sed -e 's/),(/\'$'\n/g' \
+    | sed -Ee 's/\),\(([0-9]{2,})/\n\1/g' \
     | egrep "^[0-9]+,0,.*,0$" \
     | sed -e $"s/,0,'/\t/g" \
     | sed -e "s/',0//g" \
