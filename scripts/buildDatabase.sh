@@ -5,6 +5,7 @@ set -euo pipefail
 # Force default language for output sorting to be bytewise. Necessary to ensure uniformity amongst
 # UNIX commands.
 export LC_ALL=C
+export TMPDIR=/data/tmp
 
 # By default, the latest Wikipedia dump will be downloaded. If a download date in the format
 # YYYYMMDD is provided as the first argument, it will be used instead.
